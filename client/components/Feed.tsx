@@ -1,6 +1,6 @@
 import { Flex, Heading, Spinner, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useAccount, useContractRead } from "wagmi";
+import { useContractRead } from "wagmi";
 import { BigNumber } from "ethers";
 import abi from "../utils/BuyMeACoffee.json";
 
@@ -12,8 +12,6 @@ type Memo = {
 };
 
 const Feed = () => {
-	const { address } = useAccount();
-
 	const [memos, setMemos] = useState<Memo[]>([]);
 
 	const contractAddress = "0x5C2a9B102e46E13653BAeFe52891Db2E89EaDcF9";
