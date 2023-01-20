@@ -11,7 +11,6 @@ import { goerli } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { ChakraProvider } from "@chakra-ui/react";
-import { ContractContextProvider } from "../../context/useContractContext";
 
 export default function App({ Component, pageProps }: AppProps) {
 	const { chains, provider } = configureChains(
@@ -45,9 +44,7 @@ export default function App({ Component, pageProps }: AppProps) {
 						borderRadius: "medium",
 					})}
 				>
-					<ContractContextProvider>
 						<Component {...pageProps} />
-					</ContractContextProvider>
 				</RainbowKitProvider>
 			</WagmiConfig>
 		</ChakraProvider>

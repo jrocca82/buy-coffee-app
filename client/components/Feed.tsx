@@ -1,8 +1,8 @@
-import { Flex, Heading, Text } from "@chakra-ui/react";
-import { ContractContext } from "../context/useContractContext";
-import { useContext, useEffect, useCallback, useState } from "react";
-import { useAccount } from "wagmi";
+import { Flex, Heading, Spinner, Text } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { useAccount, useContractRead } from "wagmi";
 import { BigNumber } from "ethers";
+import abi from "../utils/BuyMeACoffee.json";
 
 type Memo = {
 	from: string;
@@ -13,32 +13,68 @@ type Memo = {
 
 const Feed = () => {
 	const { address } = useAccount();
-	const { coffeeContract } = useContext(ContractContext);
 
 	const [memos, setMemos] = useState<Memo[]>([]);
 
-	const getMemosFromContract = useCallback(async () => {
-		const res = await coffeeContract?.getMemos();
-		setMemos(res);
-	}, [coffeeContract]);
+	const contractAddress = "0x5C2a9B102e46E13653BAeFe52891Db2E89EaDcF9";
+	const contractABI = abi.abi;
+
+	const contractRead = useContractRead({
+		address: contractAddress,
+		abi: contractABI,
+		functionName: "getMemos",
+		watch: true,
+	});
 
 	useEffect(() => {
-		getMemosFromContract();
-	}, [address, getMemosFromContract]);
-    
+		const memos = contractRead.data as Memo[];
+		setMemos(memos);
+	}, [contractRead.data]);
+
 	if (!memos || memos.length === 0) {
 		return <Heading size="lg">No coffees received! 😭</Heading>;
 	}
 
+	if (contractRead.isLoading) {
+		return <Spinner />;
+	}
+
+	if (contractRead.isError) {
+		return <Text>Error loading messages</Text>;
+	}
+
 	return (
-		<Flex flexDir="column" justify="space-around" h="250px" my="20px">
-			<Heading size="lg">Coffees received:</Heading>
-			{memos.map((memo) => {
+		<Flex
+			flexDir="column"
+			justify="space-around"
+			h="250px"
+			my="20px"
+			align="center"
+		>
+			<Heading size="lg" mb="20px">
+				Coffees received:
+			</Heading>
+			{memos.map((memo, i) => {
 				return (
-					<Flex key={memo.from.concat(memo.name)} flexDir="column" align="center">
-						<Text fontWeight="bold">`&quot;`{memo.message}`&quot;`</Text>
-						<Text>From: {memo.from}</Text>
-						<Text>Alias: {memo.name}</Text>
+					<Flex
+						key={memo.from.concat(memo.name)}
+						flexDir="column"
+						align="center"
+						padding="10px"
+						borderRadius={
+							memos.length === 1
+								? "10px"
+								: i === 0
+								? "10px 10px 0 0"
+								: i === memos.length - 1
+								? "0 0 10px 10px"
+								: "none"
+						}
+						bgColor={i % 2 ? "#e3e3e3" : "pink"}
+					>
+						<Text fontWeight="bold">&quot;{memo.message}&quot;</Text>
+						<Text>From: {memo.name}</Text>
+						<Text>Address: {memo.from}</Text>
 					</Flex>
 				);
 			})}

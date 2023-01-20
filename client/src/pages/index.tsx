@@ -47,9 +47,11 @@ export default function Home() {
 				w="100%"
 				align="center"
 				justify="center"
-				h="20vh"
+				h="10vh"
+				position="absolute"
+				bottom={0}
 			>
-				<Text mt="30px">
+				<Text>
 					Created by Jo Rocca for Alchemy{"'"}s Road to Web3 lesson two!
 				</Text>
 			</Flex>
