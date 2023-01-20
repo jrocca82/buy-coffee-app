@@ -44,6 +44,7 @@ export default function Home() {
 			</Flex>
 			<Flex
 				borderTop="solid 1px grey"
+				bgColor="white"
 				w="100%"
 				align="center"
 				justify="center"

@@ -1,4 +1,4 @@
-import { Flex, Heading, Spinner, Text } from "@chakra-ui/react";
+import { Flex, Heading, List, Spinner, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useContractRead } from "wagmi";
 import { BigNumber } from "ethers";
@@ -45,37 +45,39 @@ const Feed = () => {
 		<Flex
 			flexDir="column"
 			justify="space-around"
-			h="250px"
+			h="350px"
 			my="20px"
 			align="center"
 		>
 			<Heading size="lg" mb="20px">
 				Coffees received:
 			</Heading>
-			{memos.map((memo, i) => {
-				return (
-					<Flex
-						key={memo.from.concat(memo.name)}
-						flexDir="column"
-						align="center"
-						padding="10px"
-						borderRadius={
-							memos.length === 1
-								? "10px"
-								: i === 0
-								? "10px 10px 0 0"
-								: i === memos.length - 1
-								? "0 0 10px 10px"
-								: "none"
-						}
-						bgColor={i % 2 ? "#e3e3e3" : "pink"}
-					>
-						<Text fontWeight="bold">&quot;{memo.message}&quot;</Text>
-						<Text>From: {memo.name}</Text>
-						<Text>Address: {memo.from}</Text>
-					</Flex>
-				);
-			})}
+			<Flex flexDir="column" height="80%" overflowY="scroll" mb="5vh">
+				{memos.map((memo, i) => {
+					return (
+						<Flex
+							key={memo.from.concat(memo.name)}
+							flexDir="column"
+							align="center"
+							padding="10px"
+							borderRadius={
+								memos.length === 1
+									? "10px"
+									: i === 0
+									? "10px 10px 0 0"
+									: i === memos.length - 1
+									? "0 0 10px 10px"
+									: "none"
+							}
+							bgColor={i % 2 ? "#e3e3e3" : "pink"}
+						>
+							<Text fontWeight="bold">&quot;{memo.message}&quot;</Text>
+							<Text>From: {memo.name}</Text>
+							<Text>Address: {memo.from}</Text>
+						</Flex>
+					);
+				})}
+			</Flex>
 		</Flex>
 	);
 };
